@@ -38,7 +38,7 @@ class Lotto {
     }
   }
   getNumbers() {
-    return this.#numbers.slice(); // slice()로 복사본 반환
+    return this.#numbers.slice();
   }
 
   hasBonus(bonusNumber) {

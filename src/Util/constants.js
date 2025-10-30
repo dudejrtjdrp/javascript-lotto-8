@@ -27,3 +27,9 @@ export const MULTIPLE_LOTTO_ERROR = {
   COUNT_MISMATCH: `${ERROR_PREFIX} 구입금액과 Lotto의 개수가 올바르지 않습니다`,
   NOT_LOTTO_INSTANCE: `${ERROR_PREFIX} 올바른 Lotto 인스턴스가 아닙니다.`,
 };
+
+export const WINNING_ERROR = {
+  INVALID_MATCH_COUNT: `${ERROR_PREFIX} 잘못된 매칭 개수입니다.`,
+  NO_PRIZE: `${ERROR_PREFIX} 총 상금 계산 불가`,
+  NO_PROFIT_RATE: `${ERROR_PREFIX} 수익률 계산 불가`,
+};

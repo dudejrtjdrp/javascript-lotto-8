@@ -39,17 +39,4 @@ export default class MultipleLotto {
   #generateRandomNumbers() {
     return Random.pickUniqueNumbersInRange(1, 45, 6).sort((a, b) => a - b);
   }
-
-  checkWinning(lottos, winningNumbers, bonusNumber) {
-    const result = new WinningResult();
-    lottos.forEach((lotto) => {
-      const numbers = lotto.getNumbers();
-      const matchCount = numbers.filter((n) => winningNumbers.includes(n)).length;
-      const hasBonus = numbers.includes(bonusNumber);
-
-      result.addResult(matchCount, hasBonus, LOTTO_PRIZE);
-    });
-
-    return result.getResults();
-  }
 }
