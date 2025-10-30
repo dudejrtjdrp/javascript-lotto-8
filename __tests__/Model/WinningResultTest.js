@@ -1,4 +1,3 @@
-// __tests__/Model/WinningResultTest.js
 import WinningResult from '../../src/Model/WinningResult.js';
 import Lotto from '../../src/Model/Lotto.js';
 
