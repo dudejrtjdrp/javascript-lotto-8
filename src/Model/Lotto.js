@@ -1,4 +1,4 @@
-import { LOTTO_ERROR } from '../Util/constants';
+import { LOTTO_ERROR } from '../Util/constants.js';
 
 class Lotto {
   #numbers;

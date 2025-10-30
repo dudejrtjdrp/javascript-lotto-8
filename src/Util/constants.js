@@ -1,9 +1,9 @@
 export const BLANK = '';
 
 export const INPUT_COMMENT = {
-  FIRST: '구입금액을 입력해 주세요.',
-  SECOND: '당첨 번호를 입력해 주세요.',
-  THIRD: '보너스 번호를 입력해 주세요.',
+  FIRST: '구입금액을 입력해 주세요.\n',
+  SECOND: '\n당첨 번호를 입력해 주세요.\n',
+  THIRD: '\n보너스 번호를 입력해 주세요.\n',
 };
 
 export const ERROR_PREFIX = '[ERROR]';
@@ -32,6 +32,16 @@ export const WINNING_ERROR = {
   INVALID_MATCH_COUNT: `${ERROR_PREFIX} 잘못된 매칭 개수입니다.`,
   NO_PRIZE: `${ERROR_PREFIX} 총 상금 계산 불가`,
   NO_PROFIT_RATE: `${ERROR_PREFIX} 수익률 계산 불가`,
+};
+
+export const VALIDATION_ERROR = {
+  INVALID_AMOUNT: '[ERROR] 총 금액은 1,000원 이상이어야 합니다.',
+  INVALID_UNIT: '[ERROR] 금액은 1,000원 단위여야 합니다.',
+  INVALID_COUNT: '[ERROR] 로또 번호는 6개여야 합니다.',
+  NUMBER_RANGE: '[ERROR] 로또 번호는 1~45 사이여야 합니다.',
+  REDUNDANT: '[ERROR] 로또 번호는 중복될 수 없습니다.',
+  BONUS_NUMBER_RANGE: '[ERROR] 보너스 번호는 1~45 사이여야 합니다.',
+  BONUS_REDUNDANT: '[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.',
 };
 
 export const LOTTO_PRIZE = {

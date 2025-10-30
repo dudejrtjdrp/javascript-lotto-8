@@ -1,12 +1,12 @@
-import { InputHandler, OutputHandler } from '../view/inputHandler.js';
-import { INPUT_COMMENT } from '../Util/constants.js';
+import InputHandler from '../view/inputHandler.js';
+import OutputHandler from '../view/outputHandler.js';
+import { INPUT_COMMENT, LOTTO_PRIZE } from '../Util/constants.js';
 import Validation from '../Util/validation.js';
 import MultipleLotto from '../Model/MultipleLotto.js';
 import WinningResult from '../Model/WinningResult.js';
 
 export default class LottoController {
   static async play() {
-    const multipleLotto = new MultipleLotto();
     try {
       const totalAmountInput = await InputHandler.read(INPUT_COMMENT.FIRST);
       Validation.validateTotalAmount(totalAmountInput);
@@ -14,6 +14,11 @@ export default class LottoController {
 
       const lottoCount = purchaseAmount / 1000;
       const multipleLotto = new MultipleLotto(lottoCount);
+
+      OutputHandler.print(`\n${lottoCount}개를 구매했습니다.`);
+      multipleLotto.getLottos().forEach((lotto) => {
+        OutputHandler.print(`[${lotto.getNumbers().join(', ')}]`);
+      });
 
       const winningNumberInput = await InputHandler.read(INPUT_COMMENT.SECOND);
       Validation.validateLottoNumbers(winningNumberInput);
@@ -23,11 +28,12 @@ export default class LottoController {
         .sort((a, b) => a - b);
 
       const bonusNumberInput = await InputHandler.read(INPUT_COMMENT.THIRD);
-      Validation.validateBonusNumber(bonusNumberInput);
+      Validation.validateBonusNumber(bonusNumberInput, winningNumbers);
       const bonusNumber = Number(bonusNumberInput);
 
       const result = new WinningResult();
       result.recordMatches(multipleLotto.getLottos(), winningNumbers, bonusNumber);
+
       const totalPrize = this.calculateTotalPrize(result);
       const profitRate = this.calculateProfitRate(totalPrize, purchaseAmount);
 
@@ -42,17 +48,20 @@ export default class LottoController {
     const matchCounts = result.getMatchCounts();
     let total = 0;
     for (const [key, count] of Object.entries(matchCounts)) {
-      total += (LOTTO_PRIZE[key] || 0) * count;
+      if (LOTTO_PRIZE[key] !== undefined) {
+        total += LOTTO_PRIZE[key] * count;
+      }
     }
     return total;
   }
 
   static calculateProfitRate(totalPrize, purchaseAmount) {
+    if (!purchaseAmount) return '0.0';
     return ((totalPrize / purchaseAmount) * 100).toFixed(1);
   }
 
   static printStatistics(matchCounts, totalPrize, profitRate) {
-    OutputHandler.print('당첨 통계\n---');
+    OutputHandler.print('\n당첨 통계\n---');
     OutputHandler.print(
       `3개 일치 (${LOTTO_PRIZE['3'].toLocaleString()}원) - ${matchCounts['3']}개`,
     );

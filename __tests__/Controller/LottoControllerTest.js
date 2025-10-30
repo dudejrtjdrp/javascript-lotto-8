@@ -1,18 +1,23 @@
 import LottoController from '../../src/Controller/LottoController.js';
-import { InputHandler, OutputHandler } from '../../src/view/inputHandler.js';
+import InputHandler from '../../src/view/inputHandler.js';
+import OutputHandler from '../../src/view/outputHandler.js';
 import MultipleLotto from '../../src/Model/MultipleLotto.js';
 import WinningResult from '../../src/Model/WinningResult.js';
 
 jest.mock('../../src/view/inputHandler.js', () => ({
-  InputHandler: {
+  __esModule: true,
+  default: {
     read: jest.fn(),
   },
-  OutputHandler: {
+}));
+
+jest.mock('../../src/view/outputHandler.js', () => ({
+  __esModule: true,
+  default: {
     print: jest.fn(),
     printError: jest.fn(),
   },
 }));
-
 jest.mock('../../src/Model/MultipleLotto.js');
 jest.mock('../../src/Model/WinningResult.js');
 
