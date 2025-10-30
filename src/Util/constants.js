@@ -22,4 +22,8 @@ export const LOTTO_ERROR = {
   ASCENDING: `${ERROR_PREFIX} 로또 번호는 오름차순으로 정렬되어야 합니다.`,
 };
 
-export const MULTIPLE_LOTTO_ERROR = {};
+export const MULTIPLE_LOTTO_ERROR = {
+  INVALID_COUNT: `${ERROR_PREFIX} 생성할 로또 개수는 1 이상의 정수여야 합니다.`,
+  COUNT_MISMATCH: `${ERROR_PREFIX} 구입금액과 Lotto의 개수가 올바르지 않습니다`,
+  NOT_LOTTO_INSTANCE: `${ERROR_PREFIX} 올바른 Lotto 인스턴스가 아닙니다.`,
+};
