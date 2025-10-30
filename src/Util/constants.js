@@ -33,3 +33,11 @@ export const WINNING_ERROR = {
   NO_PRIZE: `${ERROR_PREFIX} 총 상금 계산 불가`,
   NO_PROFIT_RATE: `${ERROR_PREFIX} 수익률 계산 불가`,
 };
+
+export const LOTTO_PRIZE = {
+  3: 5000,
+  4: 50000,
+  5: 1500000,
+  '5BONUS': 30000000,
+  6: 2000000000,
+};
