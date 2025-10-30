@@ -35,13 +35,13 @@ export const WINNING_ERROR = {
 };
 
 export const VALIDATION_ERROR = {
-  INVALID_AMOUNT: '[ERROR] 총 금액은 1,000원 이상이어야 합니다.',
-  INVALID_UNIT: '[ERROR] 금액은 1,000원 단위여야 합니다.',
-  INVALID_COUNT: '[ERROR] 로또 번호는 6개여야 합니다.',
-  NUMBER_RANGE: '[ERROR] 로또 번호는 1~45 사이여야 합니다.',
-  REDUNDANT: '[ERROR] 로또 번호는 중복될 수 없습니다.',
-  BONUS_NUMBER_RANGE: '[ERROR] 보너스 번호는 1~45 사이여야 합니다.',
-  BONUS_REDUNDANT: '[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.',
+  INVALID_AMOUNT: `${ERROR_PREFIX} 총 금액은 1,000원 이상이어야 합니다.`,
+  INVALID_UNIT: `${ERROR_PREFIX} 금액은 1,000원 단위여야 합니다.`,
+  INVALID_COUNT: `${ERROR_PREFIX} 로또 번호는 6개여야 합니다.`,
+  NUMBER_RANGE: `${ERROR_PREFIX} 로또 번호는 1~45 사이여야 합니다.`,
+  REDUNDANT: `${ERROR_PREFIX} 로또 번호는 중복될 수 없습니다.`,
+  BONUS_NUMBER_RANGE: `${ERROR_PREFIX} 보너스 번호는 1~45 사이여야 합니다.`,
+  BONUS_REDUNDANT: `${ERROR_PREFIX} 보너스 번호는 당첨 번호와 중복될 수 없습니다.`,
 };
 
 export const LOTTO_PRIZE = {

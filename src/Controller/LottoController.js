@@ -8,40 +8,59 @@ import WinningResult from '../Model/WinningResult.js';
 export default class LottoController {
   static async play() {
     try {
-      const totalAmountInput = await InputHandler.read(INPUT_COMMENT.FIRST);
-      Validation.validateTotalAmount(totalAmountInput);
-      const purchaseAmount = Number(totalAmountInput);
+      const totalAmount = await this.getTotalAmount();
+      const multipleLotto = this.buyLottos(totalAmount);
 
-      const lottoCount = purchaseAmount / 1000;
-      const multipleLotto = new MultipleLotto(lottoCount);
-
-      OutputHandler.print(`\n${lottoCount}개를 구매했습니다.`);
-      multipleLotto.getLottos().forEach((lotto) => {
-        OutputHandler.print(`[${lotto.getNumbers().join(', ')}]`);
-      });
-
-      const winningNumberInput = await InputHandler.read(INPUT_COMMENT.SECOND);
-      Validation.validateLottoNumbers(winningNumberInput);
-      const winningNumbers = winningNumberInput
-        .split(',')
-        .map(Number)
-        .sort((a, b) => a - b);
-
-      const bonusNumberInput = await InputHandler.read(INPUT_COMMENT.THIRD);
-      Validation.validateBonusNumber(bonusNumberInput, winningNumbers);
-      const bonusNumber = Number(bonusNumberInput);
-
-      const result = new WinningResult();
-      result.recordMatches(multipleLotto.getLottos(), winningNumbers, bonusNumber);
+      const { winningNumbers, bonusNumber } = await this.getWinningInfo();
+      const result = this.calculateResult(multipleLotto, winningNumbers, bonusNumber);
 
       const totalPrize = this.calculateTotalPrize(result);
-      const profitRate = this.calculateProfitRate(totalPrize, purchaseAmount);
+      const profitRate = this.calculateProfitRate(totalPrize, totalAmount);
 
       this.printStatistics(result.getMatchCounts(), totalPrize, profitRate);
     } catch (error) {
       OutputHandler.printError(error);
       throw error;
     }
+  }
+
+  static async getTotalAmount() {
+    const totalAmountInput = await InputHandler.read(INPUT_COMMENT.FIRST);
+    Validation.validateTotalAmount(totalAmountInput);
+    return Number(totalAmountInput);
+  }
+
+  static buyLottos(totalAmount) {
+    const lottoCount = totalAmount / 1000;
+    const multipleLotto = new MultipleLotto(lottoCount);
+
+    OutputHandler.print(`\n${lottoCount}개를 구매했습니다.`);
+    multipleLotto.getLottos().forEach((lotto) => {
+      OutputHandler.print(`[${lotto.getNumbers().join(', ')}]`);
+    });
+
+    return multipleLotto;
+  }
+
+  static async getWinningInfo() {
+    const winningNumberInput = await InputHandler.read(INPUT_COMMENT.SECOND);
+    Validation.validateLottoNumbers(winningNumberInput);
+    const winningNumbers = winningNumberInput
+      .split(',')
+      .map(Number)
+      .sort((a, b) => a - b);
+
+    const bonusNumberInput = await InputHandler.read(INPUT_COMMENT.THIRD);
+    Validation.validateBonusNumber(bonusNumberInput, winningNumbers);
+    const bonusNumber = Number(bonusNumberInput);
+
+    return { winningNumbers, bonusNumber };
+  }
+
+  static calculateResult(multipleLotto, winningNumbers, bonusNumber) {
+    const result = new WinningResult();
+    result.recordMatches(multipleLotto.getLottos(), winningNumbers, bonusNumber);
+    return result;
   }
 
   static calculateTotalPrize(result) {
@@ -55,9 +74,9 @@ export default class LottoController {
     return total;
   }
 
-  static calculateProfitRate(totalPrize, purchaseAmount) {
-    if (!purchaseAmount) return '0.0';
-    return ((totalPrize / purchaseAmount) * 100).toFixed(1);
+  static calculateProfitRate(totalPrize, totalAmount) {
+    if (!totalAmount) return '0.0';
+    return ((totalPrize / totalAmount) * 100).toFixed(1);
   }
 
   static printStatistics(matchCounts, totalPrize, profitRate) {
