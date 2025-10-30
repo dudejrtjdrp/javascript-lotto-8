@@ -21,3 +21,5 @@ export const LOTTO_ERROR = {
   NUMBER_RANGE: `${ERROR_PREFIX} 로또 번호는 1부터 45 사이의 숫자여야 합니다.`,
   ASCENDING: `${ERROR_PREFIX} 로또 번호는 오름차순으로 정렬되어야 합니다.`,
 };
+
+export const MULTIPLE_LOTTO_ERROR = {};
