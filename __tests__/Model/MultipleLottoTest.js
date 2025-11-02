@@ -1,9 +1,12 @@
+import LottoController from '../../src/Controller/LottoController.js';
 import MultipleLotto from '../../src/Model/MultipleLotto.js';
 import Lotto from '../../src/Model/Lotto.js';
-import { MULTIPLE_LOTTO_ERROR } from '../../src/Util/constants.js';
+import WinningResult from '../../src/Model/WinningResult.js';
+import MultipleMatchCount from '../../src/Model/MultipleMatchCount.js';
+import MatchCount from '../../src/Model/MatchCount.js';
+import { LOTTO_PRIZE, MULTIPLE_LOTTO_ERROR } from '../../src/Util/constants.js';
 import { Random } from '@woowacourse/mission-utils';
 
-// Random 모킹
 jest.mock('@woowacourse/mission-utils', () => ({
   Random: {
     pickUniqueNumbersInRange: jest.fn(),
@@ -13,7 +16,6 @@ jest.mock('@woowacourse/mission-utils', () => ({
 describe('MultipleLotto 클래스 테스트', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // 기본 모킹 설정
     Random.pickUniqueNumbersInRange.mockReturnValue([1, 2, 3, 4, 5, 6]);
   });
 
@@ -84,6 +86,44 @@ describe('MultipleLotto 클래스 테스트', () => {
       const lottos = multipleLotto.getLottos();
       lottos.pop();
       expect(multipleLotto.countTotal()).toBe(2);
+    });
+  });
+});
+
+describe('WinningResult & MultipleMatchCount 테스트', () => {
+  test('WinningResult가 로또 결과를 기록하고 통계를 반환해야 한다', () => {
+    const result = new WinningResult();
+    const lotto1 = new Lotto([1, 2, 3, 4, 5, 6]); // 6개 일치
+    const lotto2 = new Lotto([1, 2, 3, 4, 5, 7]); // 5개+보너스
+    const bonusNumber = 7;
+    const winningNumbers = [1, 2, 3, 4, 5, 6];
+
+    result.recordMatches([lotto1, lotto2], winningNumbers, bonusNumber);
+
+    const counts = result.getMatchCounts();
+    expect(counts[6].count).toBe(1);
+    expect(counts['5BONUS'].count).toBe(1);
+    expect(counts[3].count).toBe(0);
+  });
+
+  test('MultipleMatchCount getAll() 구조가 올바르게 반환되어야 한다', () => {
+    const result = new WinningResult();
+    const lotto = new Lotto([1, 2, 3, 4, 5, 6]);
+    const winningNumbers = [1, 2, 3, 4, 5, 6];
+    const bonusNumber = 7;
+
+    result.recordMatches([lotto], winningNumbers, bonusNumber);
+    const all = result.getMatchCounts();
+
+    expect(all[6]).toEqual({
+      count: 1,
+      prize: LOTTO_PRIZE[6],
+      totalPrize: LOTTO_PRIZE[6],
+    });
+    expect(all['5BONUS']).toEqual({
+      count: 0,
+      prize: LOTTO_PRIZE['5BONUS'],
+      totalPrize: 0,
     });
   });
 });

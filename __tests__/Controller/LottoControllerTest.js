@@ -29,7 +29,6 @@ describe('LottoController 테스트', () => {
       const totalPrize = LottoController.calculateTotalPrize(result);
       expect(totalPrize).toBe(5000);
 
-      // 6. 수익률 계산
       const purchaseAmount = 8000;
       const profitRate = LottoController.calculateProfitRate(totalPrize, purchaseAmount);
       expect(parseFloat(profitRate)).toBeGreaterThan(0);
@@ -96,7 +95,6 @@ describe('LottoController 테스트', () => {
     });
 
     test('1등 복권 10장 당첨 시 총 상금 계산', () => {
-      // 1등 번호와 동일한 6개 번호로 10장 생성
       const lottos = Array.from({ length: 10 }, () => new Lotto([1, 2, 3, 4, 5, 6]));
 
       const winningNumbers = [1, 2, 3, 4, 5, 6];
@@ -105,10 +103,8 @@ describe('LottoController 테스트', () => {
       const result = new WinningResult();
       expect(() => result.recordMatches(lottos, winningNumbers, bonusNumber)).not.toThrow();
 
-      // 1등 맞은 개수 확인
       expect(result.getMatchCount('6')).toBe(10);
 
-      // 총 상금 계산
       const totalPrize = LottoController.calculateTotalPrize(result);
       expect(totalPrize).toBe(LOTTO_PRIZE['6'] * 10);
 
@@ -167,7 +163,7 @@ describe('LottoController 테스트', () => {
 
     test('4개 이하 일치 시 보너스 번호는 무시된다', () => {
       const result = new WinningResult();
-      const lottos = [new Lotto([1, 2, 3, 4, 7, 10])]; // 4개 일치 + 보너스
+      const lottos = [new Lotto([1, 2, 3, 4, 7, 10])];
       result.recordMatches(lottos, [1, 2, 3, 4, 5, 6], 7);
 
       expect(result.getMatchCount('4')).toBe(1);
@@ -195,14 +191,12 @@ describe('LottoController 테스트', () => {
     test('당첨 번호와 로또 번호의 순서가 달라도 일치 확인 가능', () => {
       const result = new WinningResult();
 
-      // MultipleLotto 인스턴스 생성
       const multipleLotto = new MultipleLotto(1);
 
-      // getLottos를 스파이해서 원하는 값 반환
-      jest.spyOn(multipleLotto, 'getLottos').mockReturnValue([
-        { getNumbers: () => [6, 5, 4, 3, 2, 1] }, // 숫자 배열
-      ]);
-      // WinningResult에 전달
+      jest
+        .spyOn(multipleLotto, 'getLottos')
+        .mockReturnValue([{ getNumbers: () => [6, 5, 4, 3, 2, 1] }]);
+
       result.recordMatches(multipleLotto.getLottos(), [1, 2, 3, 4, 5, 6], 7);
 
       expect(result.getMatchCount('6')).toBe(1);

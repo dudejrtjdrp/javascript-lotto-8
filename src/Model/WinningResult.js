@@ -1,30 +1,39 @@
+import MultipleMatchCount from './MultipleMatchCount.js';
+
 export default class WinningResult {
-  #matchCounts = {};
+  #matchCounts;
 
   constructor() {
-    // 3, 4, 5, 5BONUS, 6 등 로또 등수만 저장
-    ['3', '4', '5', '5BONUS', '6'].forEach((key) => (this.#matchCounts[key] = 0));
+    this.#matchCounts = new MultipleMatchCount();
   }
 
   recordMatches(lottos, winningNumbers, bonusNumber) {
-    lottos.forEach((lotto) => {
-      const numbers = lotto.getNumbers();
-      const matchCount = numbers.filter((number) => winningNumbers.includes(number)).length;
-      const hasBonus = numbers.includes(bonusNumber);
+    const matchResults = this.#calculateMatches(lottos, winningNumbers, bonusNumber);
 
-      let key = matchCount.toString();
-      if (matchCount === 5 && hasBonus) key = '5BONUS';
-
-      if (this.#matchCounts[key] === undefined) return; // 유효한 등수만 카운트
-      this.#matchCounts[key] = (this.#matchCounts[key] ?? 0) + 1;
+    matchResults.forEach((key) => {
+      this.#matchCounts.increment(key);
     });
   }
 
+  #calculateMatches(lottos, winningNumbers, bonusNumber) {
+    return lottos
+      .map((lotto) => {
+        const numbers = lotto.getNumbers();
+        const matchCount = numbers.filter((num) => winningNumbers.includes(num)).length;
+        const hasBonus = numbers.includes(bonusNumber);
+
+        if (matchCount === 5 && hasBonus) return '5BONUS';
+        if (matchCount >= 3) return matchCount.toString();
+        return null;
+      })
+      .filter((rank) => rank !== null);
+  }
+
   getMatchCounts() {
-    return structuredClone(this.#matchCounts);
+    return this.#matchCounts.getAll();
   }
 
   getMatchCount(key) {
-    return this.#matchCounts[key] ?? 0;
+    return this.#matchCounts.get(key);
   }
 }

@@ -51,3 +51,11 @@ export const LOTTO_PRIZE = {
   '5BONUS': 30000000,
   6: 2000000000,
 };
+
+export const PRINT_OUPUT_TEMPLATE = {
+  HEADER: '\n당첨 통계\n---',
+  MATCH: (count, prize, matched) => `${count}개 일치 (${prize.toLocaleString()}원) - ${matched}개`,
+  MATCH_BONUS: (prize, matched) =>
+    `5개 일치, 보너스 볼 일치 (${prize.toLocaleString()}원) - ${matched}개`,
+  PROFIT: (rate) => `총 수익률은 ${rate}%입니다.`,
+};
