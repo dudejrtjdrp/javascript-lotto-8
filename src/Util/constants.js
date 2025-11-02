@@ -35,6 +35,7 @@ export const WINNING_ERROR = {
 };
 
 export const VALIDATION_ERROR = {
+  INVALID_FORMAT: `${ERROR_PREFIX} 입력 형식이 올바르지 않습니다.`,
   INVALID_AMOUNT: `${ERROR_PREFIX} 총 금액은 1,000원 이상이어야 합니다.`,
   INVALID_UNIT: `${ERROR_PREFIX} 금액은 1,000원 단위여야 합니다.`,
   INVALID_COUNT: `${ERROR_PREFIX} 로또 번호는 6개여야 합니다.`,
@@ -46,6 +47,7 @@ export const VALIDATION_ERROR = {
 
 export const MULTIPLE_MATCH_COUNT_ERROR = {
   INVALID_RANK: (rank) => `${ERROR_PREFIX} 유효하지 않은 등수입니다: ${rank}`,
+  RANK_STRING: (rank) => `${ERROR_PREFIX} 등수는 문자열이어야 합니다: ${rank}`,
 };
 export const LOTTO_PRIZE = {
   3: 5000,

@@ -93,8 +93,8 @@ describe('MultipleLotto 클래스 테스트', () => {
 describe('WinningResult & MultipleMatchCount 테스트', () => {
   test('WinningResult가 로또 결과를 기록하고 통계를 반환해야 한다', () => {
     const result = new WinningResult();
-    const lotto1 = new Lotto([1, 2, 3, 4, 5, 6]); // 6개 일치
-    const lotto2 = new Lotto([1, 2, 3, 4, 5, 7]); // 5개+보너스
+    const lotto1 = new Lotto([1, 2, 3, 4, 5, 6]);
+    const lotto2 = new Lotto([1, 2, 3, 4, 5, 7]);
     const bonusNumber = 7;
     const winningNumbers = [1, 2, 3, 4, 5, 6];
 

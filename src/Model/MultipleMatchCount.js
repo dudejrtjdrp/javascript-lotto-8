@@ -15,14 +15,21 @@ export default class MultipleMatchCount {
   }
 
   increment(rank) {
-    if (!this.#multipleMatchCount[rank]) {
-      throw new Error(MULTIPLE_MATCH_COUNT_ERROR.INVALID_RANK);
-    }
-    this.#multipleMatchCount[rank].increment();
+    // if (!this.#multipleMatchCount[rank]) {
+    //   throw new Error(MULTIPLE_MATCH_COUNT_ERROR.INVALID_RANK(rank));
+    // }
+    this.#multipleMatchCount[String(rank)].increment();
   }
 
   get(rank) {
-    return this.#multipleMatchCount[rank]?.getCount() ?? 0;
+    // if (typeof rank !== 'string') {
+    //   throw new Error(MULTIPLE_MATCH_COUNT_ERROR.RANK_STRING(rank));
+    // }
+    const matchCount = this.#multipleMatchCount[String(rank)];
+    if (!matchCount) {
+      return 0;
+    }
+    return matchCount.getCount();
   }
 
   getTotalPrize() {

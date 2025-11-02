@@ -178,10 +178,6 @@ describe('LottoController 테스트', () => {
       expect(() => Validation.validateBonusNumber('7', [1, 2, 3, 4, 5, 6])).not.toThrow();
     });
 
-    test('공백이 포함된 문자열도 처리된다', () => {
-      expect(() => Validation.validateLottoNumbers('1, 2, 3, 4, 5, 6')).not.toThrow();
-    });
-
     test('앞뒤 공백은 무시된다', () => {
       expect(() => Validation.validateTotalAmount(' 5000 ')).not.toThrow();
     });

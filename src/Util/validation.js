@@ -12,10 +12,11 @@ const Validation = {
   },
 
   validateLottoNumbers(numbersInput) {
-    const lottoNumbers = numbersInput.split(',').map((num) => {
-      const trimmed = num.trim();
-      return Number(trimmed);
-    });
+    if (numbersInput.includes(' ')) {
+      throw new Error(VALIDATION_ERROR.INVALID_FORMAT);
+    }
+
+    const lottoNumbers = numbersInput.split(',').map(Number);
 
     if (lottoNumbers.length !== 6) {
       throw new Error(VALIDATION_ERROR.INVALID_COUNT);

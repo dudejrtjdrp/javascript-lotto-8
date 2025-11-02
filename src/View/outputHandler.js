@@ -11,21 +11,24 @@ class OutputHandler {
       this.print(ERROR_PREFIX);
       return;
     }
-    const handleError = error;
-    if (typeof handleError === 'string') {
-      if (!handleError.startsWith(ERROR_PREFIX)) {
-        this.print(`${ERROR_PREFIX}${handleError}`);
-        return;
-      }
-      this.print(handleError);
-      return;
-    }
 
-    if (!handleError.message.startsWith(ERROR_PREFIX)) {
-      handleError.message = `${ERROR_PREFIX}${handleError.message}`;
-    }
+    const message = this.#extractErrorMessage(error);
+    const formattedMessage = this.#formatErrorMessage(message);
+    this.print(formattedMessage);
+  }
 
-    this.print(`${handleError.message}`);
+  static #extractErrorMessage(error) {
+    if (typeof error === 'string') {
+      return error;
+    }
+    return error.message;
+  }
+
+  static #formatErrorMessage(message) {
+    if (message.startsWith(ERROR_PREFIX)) {
+      return message;
+    }
+    return `${ERROR_PREFIX}${message}`;
   }
 
   static printStatistics({ matchCounts, profitRate }) {
