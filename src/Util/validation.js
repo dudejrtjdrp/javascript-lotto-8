@@ -3,7 +3,6 @@ import { VALIDATION_ERROR } from './constants.js';
 const Validation = {
   validateTotalAmount(amountInput) {
     const amount = amountInput;
-    console.log(amount);
     if (!/^[0-9]*$/.test(amount)) {
       throw new Error(VALIDATION_ERROR.INVALID_FORMAT);
     }

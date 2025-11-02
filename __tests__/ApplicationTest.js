@@ -3,19 +3,17 @@ import { MissionUtils } from '@woowacourse/mission-utils';
 
 const mockQuestions = (inputs) => {
   MissionUtils.Console.readLineAsync = jest.fn();
-
   MissionUtils.Console.readLineAsync.mockImplementation(() => {
     const input = inputs.shift();
-
     return Promise.resolve(input);
   });
 };
 
-const mockRandoms = (numbers) => {
+const mockRandoms = (numbersList) => {
   MissionUtils.Random.pickUniqueNumbersInRange = jest.fn();
-  numbers.reduce((acc, number) => {
-    return acc.mockReturnValueOnce(number);
-  }, MissionUtils.Random.pickUniqueNumbersInRange);
+  numbersList.forEach((numbers) => {
+    MissionUtils.Random.pickUniqueNumbersInRange.mockReturnValueOnce(numbers);
+  });
 };
 
 const getLogSpy = () => {
@@ -41,6 +39,108 @@ const runException = async (input) => {
   // then
   expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
 };
+
+const runWithExceptionInput = async (firstInput, restInputs, randomNumbers) => {
+  const logSpy = getLogSpy();
+
+  mockRandoms(randomNumbers);
+  mockQuestions([firstInput, ...restInputs]);
+
+  const app = new App();
+  await app.run();
+
+  return logSpy;
+};
+
+describe('로또 통합 테스트 (재입력 포함)', () => {
+  beforeEach(() => jest.restoreAllMocks());
+
+  test('금액 형식 예외', async () => {
+    const logSpy = await runWithExceptionInput(
+      '1000j',
+      ['8000', '1,2,3,4,5,6', '7'],
+      [
+        [1, 2, 3, 4, 5, 6], // 첫번째 로또
+        [7, 8, 9, 10, 11, 12], // 두번째 로또
+        [13, 14, 15, 16, 17, 18],
+        [19, 20, 21, 22, 23, 24],
+        [25, 26, 27, 28, 29, 30],
+        [31, 32, 33, 34, 35, 36],
+        [37, 38, 39, 40, 41, 42],
+        [43, 44, 45, 1, 2, 3],
+      ],
+    );
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('8개를 구매했습니다.'));
+  });
+
+  test('금액 0원 예외', async () => {
+    const logSpy = await runWithExceptionInput(
+      '0',
+      ['5000', '1,2,3,4,5,6', '7'],
+      [
+        [1, 2, 3, 4, 5, 6],
+        [7, 8, 9, 10, 11, 12],
+        [13, 14, 15, 16, 17, 18],
+        [19, 20, 21, 22, 23, 24],
+        [25, 26, 27, 28, 29, 30],
+      ],
+    );
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('5개를 구매했습니다.'));
+  });
+
+  test('금액 1,000원 단위 예외', async () => {
+    const logSpy = await runWithExceptionInput(
+      '2500',
+      ['3000', '1,2,3,4,5,6', '7'],
+      [
+        [1, 2, 3, 4, 5, 6],
+        [7, 8, 9, 10, 11, 12],
+        [13, 14, 15, 16, 17, 18],
+      ],
+    );
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('3개를 구매했습니다.'));
+  });
+
+  test('당첨 번호 6개 미만 예외', async () => {
+    const logSpy = await runWithExceptionInput(
+      '1000',
+      ['1,2,3,4,5', '1,2,3,4,5,6', '7'],
+      [[1, 2, 3, 4, 5, 6]],
+    );
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
+  });
+
+  test('보너스 번호 중복', async () => {
+    const logSpy = await runWithExceptionInput(
+      '1000',
+      ['1,2,3,4,5,6', '6', '7'],
+      [[1, 2, 3, 4, 5, 6]],
+    );
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
+  });
+
+  test('정상 입력 시 구매와 당첨 통계 출력', async () => {
+    const logSpy = await runWithExceptionInput(
+      '2000',
+      ['1,2,3,4,5,6', '7'],
+      [
+        [1, 2, 3, 4, 5, 6],
+        [7, 8, 9, 10, 11, 12],
+      ],
+    );
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('2개를 구매했습니다.'));
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('총 수익률'));
+  });
+});
 
 describe('로또 테스트', () => {
   beforeEach(() => {
@@ -92,6 +192,14 @@ describe('로또 테스트', () => {
   });
 
   test('예외 테스트', async () => {
-    await expect(runException('1000j')).rejects.toThrow('[ERROR]');
+    await runException('1000, 1,2,3,4,5,82', '8');
+  });
+
+  test('예외 테스트', async () => {
+    await runException('1000, 1,2,3,4,5,6,', '82');
+  });
+
+  test('예외 테스트', async () => {
+    await runException('1000j');
   });
 });

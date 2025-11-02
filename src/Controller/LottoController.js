@@ -29,9 +29,15 @@ export default class LottoController {
   }
 
   static async getTotalAmount() {
-    const totalAmountInput = await InputHandler.read(INPUT_COMMENT.FIRST);
-    Validation.validateTotalAmount(totalAmountInput);
-    return Number(totalAmountInput);
+    while (true) {
+      try {
+        const totalAmountInput = await InputHandler.read(INPUT_COMMENT.FIRST);
+        Validation.validateTotalAmount(totalAmountInput);
+        return Number(totalAmountInput);
+      } catch (error) {
+        OutputHandler.printError(error);
+      }
+    }
   }
 
   static buyLottos(totalAmount) {
@@ -47,19 +53,30 @@ export default class LottoController {
   }
 
   static async getWinningNumbers() {
-    const winningNumberInput = await InputHandler.read(INPUT_COMMENT.SECOND);
-    Validation.validateLottoNumbers(winningNumberInput);
-    return winningNumberInput
-      .split(',')
-      .map((num) => Number(num.trim())) // trim 추가
-      .sort((a, b) => a - b);
+    while (true) {
+      try {
+        const winningNumberInput = await InputHandler.read(INPUT_COMMENT.SECOND);
+        Validation.validateLottoNumbers(winningNumberInput);
+        return winningNumberInput
+          .split(',')
+          .map((num) => Number(num.trim()))
+          .sort((a, b) => a - b);
+      } catch (error) {
+        OutputHandler.printError(error);
+      }
+    }
   }
 
   static async getBonusNumber(winningNumbers) {
-    const bonusNumberInput = await InputHandler.read(INPUT_COMMENT.THIRD);
-    Validation.validateBonusNumber(bonusNumberInput, winningNumbers);
-    const bonusNumber = Number(bonusNumberInput);
-    return bonusNumber;
+    while (true) {
+      try {
+        const bonusNumberInput = await InputHandler.read(INPUT_COMMENT.THIRD);
+        Validation.validateBonusNumber(bonusNumberInput, winningNumbers);
+        return Number(bonusNumberInput);
+      } catch (error) {
+        OutputHandler.printError(error);
+      }
+    }
   }
 
   static calculateLottoResult(multipleLotto, winningNumbers, bonusNumber) {
