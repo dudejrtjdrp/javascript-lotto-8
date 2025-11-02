@@ -44,6 +44,9 @@ export const VALIDATION_ERROR = {
   BONUS_REDUNDANT: `${ERROR_PREFIX} 보너스 번호는 당첨 번호와 중복될 수 없습니다.`,
 };
 
+export const MULTIPLE_MATCH_COUNT_ERROR = {
+  INVALID_RANK: (rank) => `${ERROR_PREFIX} 유효하지 않은 등수입니다: ${rank}`,
+};
 export const LOTTO_PRIZE = {
   3: 5000,
   4: 50000,

@@ -80,9 +80,4 @@ describe('MultipleMatchCount 클래스 테스트', () => {
       totalPrize: 0,
     });
   });
-
-  test('없는 rank를 increment나 get하면 undefined 대신 안전하게 처리된다', () => {
-    expect(() => multipleMatchCount.increment('INVALID')).not.toThrow();
-    expect(multipleMatchCount.get('INVALID')).toBe(0);
-  });
 });

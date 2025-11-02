@@ -1,4 +1,5 @@
 import MatchCount from './MatchCount.js';
+import { MULTIPLE_MATCH_COUNT_ERROR } from '../Util/constants.js';
 
 export default class MultipleMatchCount {
   #multipleMatchCount;
@@ -14,7 +15,10 @@ export default class MultipleMatchCount {
   }
 
   increment(rank) {
-    this.#multipleMatchCount[rank]?.increment();
+    if (!this.#multipleMatchCount[rank]) {
+      throw new Error(MULTIPLE_MATCH_COUNT_ERROR.INVALID_RANK);
+    }
+    this.#multipleMatchCount[rank].increment();
   }
 
   get(rank) {
