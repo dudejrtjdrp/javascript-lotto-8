@@ -12,7 +12,10 @@ const Validation = {
   },
 
   validateLottoNumbers(numbersInput) {
-    const lottoNumbers = numbersInput.split(',').map(Number);
+    const lottoNumbers = numbersInput.split(',').map((num) => {
+      const trimmed = num.trim();
+      return Number(trimmed);
+    });
 
     if (lottoNumbers.length !== 6) {
       throw new Error(VALIDATION_ERROR.INVALID_COUNT);
@@ -24,7 +27,6 @@ const Validation = {
       }
     }
 
-    // 중복된 숫자 체크
     const uniqueLottoNumbers = new Set(lottoNumbers);
     if (uniqueLottoNumbers.size !== lottoNumbers.length) {
       throw new Error(VALIDATION_ERROR.REDUNDANT);
@@ -32,7 +34,7 @@ const Validation = {
   },
 
   validateBonusNumber(bonusInput, winningNumbers = []) {
-    const bonusNumber = Number(bonusInput);
+    const bonusNumber = Number(bonusInput.trim());
     if (!Number.isInteger(bonusNumber) || bonusNumber < 1 || bonusNumber > 45) {
       throw new Error(VALIDATION_ERROR.BONUS_NUMBER_RANGE);
     }

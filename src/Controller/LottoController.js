@@ -51,7 +51,7 @@ export default class LottoController {
     Validation.validateLottoNumbers(winningNumberInput);
     return winningNumberInput
       .split(',')
-      .map(Number)
+      .map((num) => Number(num.trim())) // trim 추가
       .sort((a, b) => a - b);
   }
 
@@ -81,6 +81,8 @@ export default class LottoController {
 
   static calculateProfitRate(totalPrize, totalAmount) {
     if (!totalAmount) return '0.0';
-    return ((totalPrize / totalAmount) * 100).toFixed(1);
+    const rawRate = (totalPrize / totalAmount) * 100;
+    const roundedRate = Math.round((rawRate + Number.EPSILON) * 10) / 10;
+    return roundedRate.toFixed(1);
   }
 }
