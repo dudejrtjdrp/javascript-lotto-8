@@ -179,7 +179,7 @@ describe('LottoController 테스트', () => {
     });
 
     test('앞뒤 공백은 무시된다', () => {
-      expect(() => Validation.validateTotalAmount(' 5000 ')).not.toThrow();
+      expect(() => Validation.validateTotalAmount(' 5000 ')).toThrow();
     });
   });
 

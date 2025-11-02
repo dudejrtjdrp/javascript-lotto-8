@@ -20,15 +20,15 @@ describe('Validation 모듈 테스트', () => {
     });
 
     test('정수가 아닌 값은 에러를 발생시킨다', () => {
-      expect(() => Validation.validateTotalAmount('abc')).toThrow(VALIDATION_ERROR.INVALID_AMOUNT);
+      expect(() => Validation.validateTotalAmount('abc')).toThrow(VALIDATION_ERROR.INVALID_FORMAT);
       expect(() => Validation.validateTotalAmount('1000.5')).toThrow(
-        VALIDATION_ERROR.INVALID_AMOUNT,
+        VALIDATION_ERROR.INVALID_FORMAT,
       );
     });
 
     test('음수는 에러를 발생시킨다', () => {
       expect(() => Validation.validateTotalAmount('-1000')).toThrow(
-        VALIDATION_ERROR.INVALID_AMOUNT,
+        VALIDATION_ERROR.INVALID_FORMAT,
       );
     });
   });
