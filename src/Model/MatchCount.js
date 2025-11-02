@@ -1,4 +1,4 @@
-import { LOTTO_PRIZE } from '../Util/constants';
+import { LOTTO_PRIZE } from '../Util/constants.js';
 
 export default class MatchCount {
   #rank;
