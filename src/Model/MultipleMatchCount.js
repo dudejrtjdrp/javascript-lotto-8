@@ -15,16 +15,10 @@ export default class MultipleMatchCount {
   }
 
   increment(rank) {
-    // if (!this.#multipleMatchCount[rank]) {
-    //   throw new Error(MULTIPLE_MATCH_COUNT_ERROR.INVALID_RANK(rank));
-    // }
     this.#multipleMatchCount[String(rank)].increment();
   }
 
   get(rank) {
-    // if (typeof rank !== 'string') {
-    //   throw new Error(MULTIPLE_MATCH_COUNT_ERROR.RANK_STRING(rank));
-    // }
     const matchCount = this.#multipleMatchCount[String(rank)];
     if (!matchCount) {
       return 0;
